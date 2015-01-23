@@ -10,9 +10,37 @@
 <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
 
 </head>
-<body>
-<div class="view-container" ng-cloak>
-    <div ng-view class="view-frame"></div>
+<body ng-controller="GrimoireController as grimoire">
+
+<div class="col-md-12 menu">{{grimoire.welcome}}</div>
+<div class="col-md-12">
+<div class="col-md-3 menu">
+<div slimscroll="{height: '200px', alwaysVisible:true, railVisible:true}">
+    <ul>
+        <li ng-repeat="source in grimoire.sources"><input type="checkbox" value={{source}}>{{source.name}}
+            <ul>
+            <li ng-repeat="item in source.sources"><input type="radio" name="source" value={{item}}>{{item}}</li>
+            </ul>
+        </li>
+    </ul>
+    </div>
+</div>
+<div class="col-md-9 menu">
+    <div slimscroll="{height: '500px', alwaysVisible:true, railVisible:true}">
+    <div class="item-list" ng-repeat="list in grimoire.itemLists">
+        <span><strong>~~{{list.timestamp|date:'medium'}}~~</strong> <input class="copy" type="button" ng-click="grimoire.copyToClipboard(list)" value="Copy to clipboard"></span>
+        <ul>
+        <li ng-repeat="item in list.items">{{item.name}} {{item.worth}}gp <a class="super" ng-if="item.url && item.url != ''" href={{item.url}}>link</a></li>
+        </ul>
+    </div>
+    </div>
+</div>
+</div>
+<div class="col-md-12 big">
+<div class="col-md-3 menu">Minor Item <input type="number" class="form-control"></div>
+<div class="col-md-3 menu">Medium Item <input type="number" class="form-control"></div>
+<div class="col-md-3 menu">Major Item <input type="number" class="form-control"></div>
+<div class="col-md-3 menu"><input type="button" value="GO"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
@@ -37,6 +65,8 @@
 <script type="application/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script type="application/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 <script type="application/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="application/javascript" src="bower_components/slimscroll/jquery.slimscroll.js"></script>
+<script type="application/javascript" src="bower_components/angular-slimscroll/angular-slimscroll.js"></script>
 
 <script type="application/javascript" src="app.js"></script>
 <script type="application/javascript" src="grimoire-controller.js"></script>
