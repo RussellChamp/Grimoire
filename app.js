@@ -5,8 +5,15 @@
         //'ngRoute',
         'ui.bootstrap',
         'ui.slimscroll',
+        'zeroclipboard',
         'grimoire.controller',
         ]);
+
+    app.config(['uiZeroclipConfigProvider', function(uiZeroclipConfigProvider) {
+        uiZeroclipConfigProvider.setZcConf({
+        swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'
+        });
+    }]);
 
 /*
     app.config(['$routeProvider', function($routeProvider) {

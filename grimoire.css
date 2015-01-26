@@ -14,9 +14,36 @@
 }
 
 .copy {
-    font-size: smaller;
+    font-size: x-small;
 }
 
 .big {
     font-size: 200%;
+}
+
+.sidebar {
+    height: 30em;
+}
+
+.itembar {
+    height: 40em;
+}
+
+.header {
+    height: 2em;
+}
+
+.footer {
+    height: 4em;
+    white-space:nowrap;
+    margin-top: 1em;
+}
+
+.list-header {
+    width: 100%;
+}
+
+input.numberbox {
+    width: 4em;
+    display:inline-block;
 }

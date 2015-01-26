@@ -12,35 +12,49 @@
 </head>
 <body ng-controller="GrimoireController as grimoire">
 
-<div class="col-md-12 menu">{{grimoire.welcome}}</div>
+<div class="col-md-12 big menu header">{{grimoire.welcome}}</div>
 <div class="col-md-12">
-<div class="col-md-3 menu">
-<div slimscroll="{height: '200px', alwaysVisible:true, railVisible:true}">
+<!--LIST OF ITEM SOURCES-->
+<div class="col-md-3 sidebar">
+<div class="list-title menu">Sources:</div>
+<div slimscroll="{height:'auto', alwaysVisible:true, railVisible:true}" id="sourceScroll" class="menu">
     <ul>
-        <li ng-repeat="source in grimoire.sources"><input type="checkbox" value={{source}}>{{source.name}}
+        <li ng-repeat="source in grimoire.sources"><input type="checkbox" value={{source}} ng-model="source.selected" ng-change="grimoire.checkSource(source)">{{source.name}}
             <ul>
-            <li ng-repeat="item in source.sources"><input type="radio" name="source" value={{item}}>{{item}}</li>
+            <li ng-repeat="item in source.sources"><input type="radio" name="source" ng-model="grimoire.radio" value={{source.shortName+'|'+item}} ng-change="grimoire.checkRadio()">{{item}}</li>
             </ul>
         </li>
     </ul>
     </div>
+    <div class="menu">
+    QUICK BUTTONS
+    Get Deity
+    Get Energy Type
+    Get Spell (level)
+    Generate Spell Book (caster level)
+    Generate Item Intelligence (price)
+    </div>
 </div>
-<div class="col-md-9 menu">
-    <div slimscroll="{height: '500px', alwaysVisible:true, railVisible:true}">
+<!--LIST OF ITEM LISTS-->
+<div class="col-md-9 itembar">
+    <div class="menu">History:</div>
+    <div slimscroll="{height:'auto', alwaysVisible:true, railVisible:true, start:'bottom'}" id="itemScroll" class="menu">
     <div class="item-list" ng-repeat="list in grimoire.itemLists">
-        <span><strong>~~{{list.timestamp|date:'medium'}}~~</strong> <input class="copy" type="button" ng-click="grimoire.copyToClipboard(list)" value="Copy to clipboard"></span>
+        <span><strong>~~{{list.timestamp|date:'medium'}}~~</strong> <button ui-zeroclip zeroclip-text="grimoire.copyToClipboard(list)" class="copy" type="button">Copy to clipboard</button></span>
         <ul>
-        <li ng-repeat="item in list.items">{{item.name}} {{item.worth}}gp <a class="super" ng-if="item.url && item.url != ''" href={{item.url}}>link</a></li>
+        <li ng-repeat="item in list.items track by $index">{{item.name}}<span ng-if="item.description"> {{item.description}}</span><span ng-if="item.cost > 0"> {{item.cost|number}}gp</span><a class="super" target="_blank" ng-if="item.url" href={{item.url}}>link</a>
+        <ul ng-if="item.intelligence"><li>{{item.intelligence.print()}}</li></ul></li>
         </ul>
+        {{list.notes}}
     </div>
     </div>
 </div>
 </div>
-<div class="col-md-12 big">
-<div class="col-md-3 menu">Minor Item <input type="number" class="form-control"></div>
-<div class="col-md-3 menu">Medium Item <input type="number" class="form-control"></div>
-<div class="col-md-3 menu">Major Item <input type="number" class="form-control"></div>
-<div class="col-md-3 menu"><input type="button" value="GO"></div>
+<div class="col-md-12 big footer">
+<div class="col-md-3 menu">Minor Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[0]"></div>
+<div class="col-md-3 menu">Medium Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[1]"></div>
+<div class="col-md-3 menu">Major Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[2]"></div>
+<div class="col-md-3 menu"><input type="button" value="GO" ng-click="grimoire.generateItems()"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
@@ -67,6 +81,8 @@
 <script type="application/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script type="application/javascript" src="bower_components/slimscroll/jquery.slimscroll.js"></script>
 <script type="application/javascript" src="bower_components/angular-slimscroll/angular-slimscroll.js"></script>
+<script type="application/javascript" src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<script type="application/javascript" src="bower_components/angular-zeroclipboard/src/angular-zeroclipboard.js"></script>
 
 <script type="application/javascript" src="app.js"></script>
 <script type="application/javascript" src="grimoire-controller.js"></script>
