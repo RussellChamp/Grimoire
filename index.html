@@ -8,20 +8,21 @@
 <link href="bower_components/angular/angular-csp.css" rel="stylesheet" />
 <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+<!--<link href="bower_components/angular-material/angular-material.css" rel="stylesheet" />
+<link href="bower_components/angular-material/default-theme.css" rel="stylesheet" />-->
 
 </head>
 <body ng-controller="GrimoireController as grimoire">
-
 <div class="col-md-12 big menu header">{{grimoire.welcome}}</div>
 <div class="col-md-12">
 <!--LIST OF ITEM SOURCES-->
 <div class="col-md-3 sidebar">
-<div class="list-title menu">Sources:</div>
+<div class="list-title big menu">Sources:</div>
 <div slimscroll="{height:'auto', alwaysVisible:true, railVisible:true}" id="sourceScroll" class="menu">
     <ul>
-        <li ng-repeat="source in grimoire.sources"><input type="checkbox" value={{source}} ng-model="source.selected" ng-change="grimoire.checkSource(source)">{{source.name}}
+        <li ng-repeat="source in grimoire.sources" class="sourceItem"><input type="checkbox" value={{source}} ng-model="source.selected" ng-change="grimoire.checkSource(source)">{{source.name}}
             <ul>
-            <li ng-repeat="item in source.sources"><input type="radio" name="source" ng-model="grimoire.radio" value={{source.shortName+'|'+item}} ng-change="grimoire.checkRadio()">{{item}}</li>
+            <li ng-repeat="item in source.sources" class="sourceItem"><input type="radio" name="source" ng-model="grimoire.radio" value={{source.shortName+'|'+item}} ng-change="grimoire.checkRadio()">{{item}}</li>
             </ul>
         </li>
     </ul>
@@ -37,13 +38,19 @@
 </div>
 <!--LIST OF ITEM LISTS-->
 <div class="col-md-9 itembar">
-    <div class="menu">History:</div>
+    <div class="big menu">History:</div>
     <div slimscroll="{height:'auto', alwaysVisible:true, railVisible:true, start:'bottom'}" id="itemScroll" class="menu">
     <div class="item-list" ng-repeat="list in grimoire.itemLists">
         <span><strong>~~{{list.timestamp|date:'medium'}}~~</strong> <button ui-zeroclip zeroclip-text="grimoire.copyToClipboard(list)" class="copy" type="button">Copy to clipboard</button></span>
+        <!--START ITEM LIST-->
+        <br/>
+        <span ng-if="grimoire.getValue(list.items) > 0"><strong>Total Value: </strong>{{grimoire.getValue(list.items)|number}}gp</span>
         <ul>
         <li ng-repeat="item in list.items track by $index">{{item.name}}<span ng-if="item.description"> {{item.description}}</span><span ng-if="item.cost > 0"> {{item.cost|number}}gp</span><a class="super" target="_blank" ng-if="item.url" href={{item.url}}>link</a>
         <ul ng-if="item.intelligence"><li>{{item.intelligence.print()}}</li></ul></li>
+        </ul>
+        <ul>
+        <li ng-repeat="spell in list.spells track by $index">{{spell.name}} ({{spell.type}}, Level {{spell.level}}) {{spell.source}}</li>
         </ul>
         {{list.notes}}
     </div>
@@ -56,7 +63,17 @@
 <div class="col-md-3 menu">Major Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[2]"></div>
 <div class="col-md-3 menu"><input type="button" value="GO" ng-click="grimoire.generateItems()"></div>
 </div>
+<div class="col-md-12 footer">
+<strong>Quick Links:</strong>
+<button class="btn btn-default btn-md" ng-click="grimoire.getDeity()">Get Deity</button>
+<button class="btn btn-default btn-md" ng-click="grimoire.getEnergyType()">Get Energy Type</button>
+<button class="btn btn-default btn-md" ng-click="grimoire.getSpell(grimoire.spellType, grimoire.spellLevel)">Get Spell</button> (Level <input type="number" class="numberbox form-control" ng-model="grimoire.spellLevel"> <input type="radio" name="spellType" value="arcane" ng-model="grimoire.spellType">Arcane <input type="radio" name="spellType" value="divine" ng-model="grimoire.spellType">Divine)
+<button class="btn btn-default btn-md" ng-click="grimoire.generateSpellbook(grimoire.casterLevel)">Generate Spellbook</button>(Caster Level: <input type="number" class="numberbox form-control" ng-model="grimoire.casterLevel">)
+<button class="btn btn-default btn-md" ng-click="grimoire.generateIntelligence(grimoire.baseCost)">Generate Item Intelligence</button>(Base cost: <input type="number" class="numberbox form-control" ng-model="grimoire.baseCost">)
 
+</div>
+
+<!--GrimoireJS library-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 <script type="application/javascript" src="../GrimoireJS/grimoire.js"></script>
 <script type="application/javascript" src="../GrimoireJS/intelligence.js"></script>
@@ -73,17 +90,33 @@
 <script type="application/javascript" src="../GrimoireJS/energy.js"></script>
 <script type="application/javascript" src="../GrimoireJS/armors.js"></script>
 <script type="application/javascript" src="../GrimoireJS/shields.js"></script>
+
+<!--jquery-->
 <script type="application/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+
+<!--angular-->
 <script type="application/javascript" src="bower_components/angular/angular.js"></script>
 <script type="application/javascript" src="bower_components/angular-route/angular-route.js"></script>
+<!--angular-material-->
+<!--
+<script type="application/javascript" src="bower_components/angular-aria/angular-aria.js"></script>
+<script type="application/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+<script type="application/javascript" src="bower_components/hammerjs/hammer.js"></script>
+<script type="application/javascript" src="bower_components/angular-material/angular-material.js"></script>-->
+
+<!--bootstrap-->
 <script type="application/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script type="application/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 <script type="application/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+<!--slimscroll-->
 <script type="application/javascript" src="bower_components/slimscroll/jquery.slimscroll.js"></script>
 <script type="application/javascript" src="bower_components/angular-slimscroll/angular-slimscroll.js"></script>
+<!--zeroclipboard-->
 <script type="application/javascript" src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
 <script type="application/javascript" src="bower_components/angular-zeroclipboard/src/angular-zeroclipboard.js"></script>
 
+<!--my app-->
 <script type="application/javascript" src="app.js"></script>
 <script type="application/javascript" src="grimoire-controller.js"></script>
 </body>

@@ -26,7 +26,8 @@
 }
 
 .itembar {
-    height: 40em;
+    height: 45em;
+    padding-bottom:5em;
 }
 
 .header {
@@ -34,9 +35,8 @@
 }
 
 .footer {
-    height: 4em;
+    height: 2em;
     white-space:nowrap;
-    margin-top: 1em;
 }
 
 .list-header {
@@ -46,4 +46,8 @@
 input.numberbox {
     width: 4em;
     display:inline-block;
+}
+
+.sourceItem {
+    padding: .2em;
 }
