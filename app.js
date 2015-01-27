@@ -11,7 +11,8 @@
 
     app.config(['uiZeroclipConfigProvider', function(uiZeroclipConfigProvider) {
         uiZeroclipConfigProvider.setZcConf({
-        swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'
+        //swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'
+        swfPath: 'https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf'
         });
     }]);
 
