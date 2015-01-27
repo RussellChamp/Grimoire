@@ -60,21 +60,29 @@
 </div>
 <div class="col-md-12 footer">
 <div class="col-md-7">
-<div class="col-md-4 big menu">Minor Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[0]"></div>
-<div class="col-md-4 big menu">Medium Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[1]"></div>
-<div class="col-md-4 big menu">Major Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[2]"></div>
+<div class="col-md-4 itemcounter menu">Minor Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[0]"></div>
+<div class="col-md-4 itemcounter menu">Medium Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[1]"></div>
+<div class="col-md-4 itemcounter menu">Major Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[2]"></div>
 </div>
-<div class="col-md-5 menu"><input type="button" value="GO" class="big" ng-click="grimoire.generateItems()">(Minimum Total Cost: <input type="number" class="largecount form-control" ng-model="grimoire.minimumTotalCost">gp)</div>
+<div class="col-md-4 menu"><input type="button" value="GO" class="big" ng-click="grimoire.generateItems()">(Minimum Total Cost: <input type="number" class="largecount form-control" ng-model="grimoire.minimumTotalCost">gp)</div>
 </div>
 <div class="col-md-12 footer">
-<strong>Quick Links:</strong>
+<div class="col-md-1 col-sm-12"><strong>Quick Links:</strong></div>
+<div class="col-md-3 col-sm-12">
 <button class="btn btn-default btn-md" ng-click="grimoire.getDeity()">Get Deity</button>
 <button class="btn btn-default btn-md" ng-click="grimoire.getEnergyType()">Get Energy Type</button>
-<button class="btn btn-default btn-md" ng-click="grimoire.getSpell(grimoire.spellType, grimoire.spellLevel)">Get Spell</button> (Level <input type="number" class="numberbox form-control" ng-model="grimoire.spellLevel"> <input type="radio" name="spellType" value="arcane" ng-model="grimoire.spellType">Arcane <input type="radio" name="spellType" value="divine" ng-model="grimoire.spellType">Divine)
-<button class="btn btn-default btn-md" ng-click="grimoire.generateSpellbook(grimoire.casterLevel)">Generate Spellbook</button>(Caster Level: <input type="number" class="numberbox form-control" ng-model="grimoire.casterLevel">)
-<button class="btn btn-default btn-md" ng-click="grimoire.generateIntelligence(grimoire.baseCost)">Generate Item Intelligence</button>(Base cost: <input type="number" class="numberbox form-control" ng-model="grimoire.baseCost">)
-
 </div>
+<div class="col-md-4 col-sm-12">
+<button class="btn btn-default btn-md" ng-click="grimoire.getSpell(grimoire.spellType, grimoire.spellLevel)">Get Spell</button> (Level <input type="number" class="numberbox form-control" ng-model="grimoire.spellLevel"> <input type="radio" name="spellType" value="arcane" ng-model="grimoire.spellType">Arcane <input type="radio" name="spellType" value="divine" ng-model="grimoire.spellType">Divine)
+</div>
+<div class="col-md-3 col-sm-12">
+<button class="btn btn-default btn-md" ng-click="grimoire.generateSpellbook(grimoire.casterLevel)">Generate Spellbook</button>(Caster Level: <input type="number" class="numberbox form-control" ng-model="grimoire.casterLevel">)
+</div>
+<div class="col-md-3 col-sm-12">
+<button class="btn btn-default btn-md" ng-click="grimoire.generateIntelligence(grimoire.baseCost)">Generate Item Intelligence</button>(Base cost: <input type="number" class="largecount form-control" ng-model="grimoire.baseCost">gp)
+</div>
+</div>
+~~<a href="about.html">About</a>~~
 
 <!--GrimoireJS library-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>

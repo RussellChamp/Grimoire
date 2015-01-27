@@ -30,12 +30,17 @@
     padding-bottom:5em;
 }
 
+.itemcounter {
+    font-size: 200%;
+    text-align: center;
+}
+
 .header {
-    height: 2em;
+    height: auto;
 }
 
 .footer {
-    height: 2em;
+    height: auto;
     white-space:nowrap;
     padding-bottom:4em;
 }
