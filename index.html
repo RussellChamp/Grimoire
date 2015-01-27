@@ -32,12 +32,7 @@
     </ul>
     </div>
     <div class="menu">
-    QUICK BUTTONS
-    Get Deity
-    Get Energy Type
-    Get Spell (level)
-    Generate Spell Book (caster level)
-    Generate Item Intelligence (price)
+    QUICK BUTTONS OR ADS?
     </div>
 </div>
 <!--LIST OF ITEM LISTS-->
@@ -51,9 +46,11 @@
         <span ng-if="grimoire.getValue(list.items) > 0"><strong>Total Value: </strong>{{grimoire.getValue(list.items)|number}}gp</span>
         <ul>
         <li ng-repeat="item in list.items track by $index">{{item.name}}<span ng-if="item.description"> {{item.description}}</span><span ng-if="item.cost > 0"> {{item.cost|number}}gp</span><a class="super" target="_blank" ng-if="item.url" href={{item.url}}>link</a>
-        <ul ng-if="item.intelligence"><li>{{item.intelligence.print()}}</li></ul></li>
+        <!--PRINT ITEM INTELLIGENCE-->
+        <ul ng-if="item.intelligence"><li ng-repeat="stat in item.intelligence.print().split(';')" ng-if="stat.split(':')[0] != 'Cost'"><strong>{{stat.split(':')[0]}}:</strong>{{stat.split(':')[1]}}</li></ul></li>
         </ul>
         <ul>
+        <!--START SPELLS LIST-->
         <li ng-repeat="spell in list.spells track by $index">{{spell.name}} ({{spell.type}}, Level {{spell.level}}) {{spell.source}}</li>
         </ul>
         {{list.notes}}
@@ -61,11 +58,13 @@
     </div>
 </div>
 </div>
-<div class="col-md-12 big footer">
-<div class="col-md-3 menu">Minor Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[0]"></div>
-<div class="col-md-3 menu">Medium Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[1]"></div>
-<div class="col-md-3 menu">Major Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[2]"></div>
-<div class="col-md-3 menu"><input type="button" value="GO" ng-click="grimoire.generateItems()"></div>
+<div class="col-md-12 footer">
+<div class="col-md-7">
+<div class="col-md-4 big menu">Minor Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[0]"></div>
+<div class="col-md-4 big menu">Medium Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[1]"></div>
+<div class="col-md-4 big menu">Major Item <input type="number" class="numberbox form-control" ng-model="grimoire.itemCount[2]"></div>
+</div>
+<div class="col-md-5 menu"><input type="button" value="GO" class="big" ng-click="grimoire.generateItems()">(Minimum Total Cost: <input type="number" class="largecount form-control" ng-model="grimoire.minimumTotalCost">gp)</div>
 </div>
 <div class="col-md-12 footer">
 <strong>Quick Links:</strong>

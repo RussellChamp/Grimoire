@@ -37,6 +37,7 @@
 .footer {
     height: 2em;
     white-space:nowrap;
+    padding-bottom:4em;
 }
 
 .list-header {
@@ -45,6 +46,10 @@
 
 input.numberbox {
     width: 4em;
+    display:inline-block;
+}
+input.largecount {
+    width: 10em;
     display:inline-block;
 }
 

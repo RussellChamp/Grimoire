@@ -15,6 +15,7 @@
         this.spellType = "arcane";
         this.casterLevel = 1;
         this.baseCost = 1000;
+        this.minimumTotalCost = 0;
 
         this.sources = [
         {
@@ -80,41 +81,56 @@
         };
 
         this.generateItems = function() {
+            var tries = 10;
             var itemList = {};
-            itemList.items = [];
+            do {
+                itemList.items = [];
+                if(tries === 0) {
+                    itemList.notes = "ERROR: Could not generate items over " + self.minimumTotalCost + "gp after 10 tries";
+                    break;
+                }
 
-            if(self.radio) {
-                //console.log("Generating item from " + self.radio);
-                var source = self.radio.split("|");
-                var types = ["minor", "medium", "major"];
-                for(var idx in types) { //for each item level
-                    for(var i = 0; i < self.itemCount[idx]; i++) {
-                        itemList.items.push(self.generateItem(source[1], types[idx]));
+                if(self.radio) {
+                    //console.log("Generating item from " + self.radio);
+                    var source = self.radio.split("|");
+                    var types = ["minor", "medium", "major"];
+                    for(var idx in types) { //for each item level
+                        for(var i = 0; i < self.itemCount[idx]; i++) {
+                            itemList.items.push(self.generateItem(source[1], types[idx]));
+                            }
                         }
                     }
-                }
-            else {
-                var ss = "";
-                for( var idx in self.sources) {
-                    var source = self.sources[idx];
-                    if(source.selected) {
-                        ss += source.shortName + " ";
+                else {
+                    var ss = "";
+                    for( var idx in self.sources) {
+                        var source = self.sources[idx];
+                        if(source.selected) {
+                            ss += source.shortName + " ";
+                        }
+                    }
+                    if(ss) {
+                        //console.log("Generating items from " + ss);
+                        itemList.items = Grimoire.getItems(self.itemCount[0], self.itemCount[1], self.itemCount[2]);
+                    }
+                    else {
+                        console.log("Error: No sources selected");
                     }
                 }
-                if(ss) {
-                    //console.log("Generating items from " + ss);
-                    itemList.items = Grimoire.getItems(self.itemCount[0], self.itemCount[1], self.itemCount[2]);
-                }
-                else {
-                    console.log("Error: No sources selected");
-                }
-            }
-            itemList.timestamp = new Date();
+                tries--;
+            } while(self.minimumTotalCost && self.getValue(itemList.items) < self.minimumTotalCost);
             self.addItemList(itemList);
         };
 
         this.generateIntelligence = function(cost) {
-            var list = {};
+            var itemInt = Intelligence.getItemIntelligence(cost);
+            var list = {
+                items: [{
+                    name: "Intelligent Item",
+                    intelligence: itemInt,
+                    cost: cost + itemInt.cost,
+                }],
+            };
+            /*
             var stats = Intelligence.getItemIntelligence(cost).print().split(";");
             list.notes = "";
             for(var s in stats) {
@@ -124,10 +140,14 @@
             }
 
             list.timestamp = new Date();
-            self.itemLists.push(list);
+            */
+            self.addItemList(list);
         };
 
         this.addItemList = function(list) {
+            if(!list.timestamp) {
+                list.timestamp = new Date();
+            }
             self.itemLists.push(list);
             setTimeout(function() { self.scrollItemsBottom(); }, 200);
             //otherwise the scroll will get ahead of the add
@@ -151,24 +171,14 @@
         };
 
         this.getDeity = function() {
-            self.itemLists.push({
-                timestamp: new Date(),
-                items: [
-                {
-                    name: "Deity: " + Grimoire.getDeity()
-                }
-                ],
+            self.addItemList({
+                notes: "Deity: " + Grimoire.getDeity(),
             });
         };
 
         this.getEnergyType = function() {
-            self.itemLists.push({
-                timestamp: new Date(),
-                items: [
-                {
-                    name: "Energy Type: " + Grimoire.getEnergyResistance()
-                }
-                ],
+            self.addItemList({
+                notes: "Energy Type: " + Grimoire.getEnergyResistance()
             });
         };
 
@@ -180,7 +190,7 @@
                 itemList.spells.push(Spells.getLevelSpell(level, type));
                 itemList.timestamp = new Date();
                 console.log(itemList);
-                self.itemLists.push(itemList);
+                self.addItemList(itemList);
             }
         };
 
@@ -221,7 +231,7 @@
                 }
 
                 itemList.timestamp = new Date();
-                self.itemLists.push(itemList);
+                self.addItemList(itemList);
             }
         };
 
